@@ -1,0 +1,158 @@
+---
+const features = [
+    {
+        title: "零配置部署",
+        desc: "无需安装客户端、编写配置文件或启动守护进程，系统自带的 SSH 客户端就能用。",
+        icon: "zap",
+    },
+    {
+        title: "SSH 加密传输",
+        desc: "所有流量经 SSH 隧道加密传输，公钥白名单鉴权，只有授权用户才能创建隧道。",
+        icon: "lock",
+    },
+    {
+        title: "自动 HTTPS",
+        desc: "泛域名证书开箱即用，每条隧道自动获得 https:// 地址，无需任何额外配置。",
+        icon: "shield",
+    },
+    {
+        title: "自定义子域名",
+        desc: "指定好记的子域名分享给团队成员，不指定时由系统自动分配随机子域名。",
+        icon: "globe",
+    },
+];
+---
+
+<section id="features">
+    <div class="wrap inner">
+        <div class="head">
+            <div class="eyebrow">FEATURES</div>
+            <h2>为什么选择 edge.ng</h2>
+            <p class="sub">零配置、端到端加密、自动 HTTPS —— 开发者友好的内网穿透方案。</p>
+        </div>
+        <div class="cards">
+            {
+                features.map((f) => (
+                    <div class="card">
+                        <div class="icon">
+                            {f.icon === "zap" && (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                </svg>
+                            )}
+                            {f.icon === "lock" && (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                            )}
+                            {f.icon === "shield" && (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                                    <path d="m9 12 2 2 4-4" />
+                                </svg>
+                            )}
+                            {f.icon === "globe" && (
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="2" y1="12" x2="22" y2="12" />
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                </svg>
+                            )}
+                        </div>
+                        <h3>{f.title}</h3>
+                        <p>{f.desc}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .inner {
+        padding-top: clamp(64px, 7vw, 96px);
+        padding-bottom: clamp(64px, 7vw, 96px);
+    }
+    .head {
+        max-width: 620px;
+        margin-bottom: 42px;
+    }
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+    }
+    .eyebrow::before {
+        width: 28px;
+        height: 1px;
+        content: "";
+        background: currentColor;
+    }
+    h2 {
+        margin-top: 14px;
+        font-size: clamp(28px, 2.8vw, 38px);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
+    }
+    .sub {
+        margin-top: 14px;
+        color: var(--ink-2);
+        font-size: 15px;
+        line-height: 1.75;
+    }
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+    }
+    .card {
+        background: rgba(255, 254, 251, 0.9);
+        border: 1px solid #e5d9c7;
+        border-radius: 15px;
+        padding: 24px 22px;
+        box-shadow: 0 6px 18px rgba(59, 40, 22, 0.035);
+        transition:
+            transform 0.22s ease,
+            border-color 0.22s ease,
+            box-shadow 0.22s ease;
+    }
+    .card:hover {
+        border-color: #d5bea5;
+        box-shadow: 0 14px 30px rgba(59, 40, 22, 0.08);
+        transform: translateY(-3px);
+    }
+    .icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f6ece4;
+        border: 1px solid #ecd9c9;
+        border-radius: 10px;
+        margin-bottom: 16px;
+    }
+    h3 {
+        font-size: 16.5px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
+        margin-bottom: 8px;
+    }
+    p {
+        color: var(--ink-2);
+        font-size: 13.5px;
+        line-height: 1.7;
+    }
+    @media (max-width: 1000px) {
+        .cards {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+    @media (max-width: 560px) {
+        .cards {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

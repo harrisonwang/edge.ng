@@ -1,0 +1,60 @@
+<footer>
+    <div class="wrap top">
+        <div class="left">
+            <svg width="16" height="16" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <path d="M4 6l10 10L4 26" stroke="var(--terracotta)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M17 6l10 10L17 26" stroke="#9a6a4d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <span class="name">edge.ng</span>
+            <span class="tag">自托管内网穿透服务</span>
+        </div>
+    </div>
+    <div class="rule">
+        <div class="wrap legal">© 2026 edge.ng</div>
+    </div>
+</footer>
+
+<style>
+    footer {
+        background: var(--term-bg);
+        color: #9a9286;
+        border-top: 1px solid var(--term-line);
+    }
+    .top {
+        padding: 40px 28px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+    }
+    .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .name {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 18px;
+        color: #faf6ec;
+    }
+    .tag {
+        margin-left: 8px;
+        font-size: 13px;
+    }
+    .rule {
+        border-top: 1px solid var(--term-line);
+    }
+    .legal {
+        padding: 16px 28px;
+        font-size: 12px;
+        color: #5f584f;
+        font-family: var(--mono);
+    }
+    @media (max-width: 560px) {
+        .tag {
+            display: none;
+        }
+    }
+</style>

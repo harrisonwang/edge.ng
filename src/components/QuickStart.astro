@@ -1,0 +1,346 @@
+---
+const STEP1_COPY = 'ssh-keygen -t ed25519\ncat ~/.ssh/id_ed25519.pub';
+const STEP2_COPY = "ssh -R dev:80:127.0.0.1:8080 ssh.edge.ng";
+const TIP_COPY =
+    'autossh -M 0 -o "ServerAliveInterval 30" -R dev:80:127.0.0.1:8080 ssh.edge.ng';
+---
+
+<section id="quickstart">
+    <div class="wrap inner">
+        <div class="head">
+            <div class="lead">
+                <div class="eyebrow">QUICKSTART</div>
+                <h2>两步，把本地服务暴露到公网</h2>
+            </div>
+            <p class="sub">
+                首次使用先把公钥交给管理员加入白名单，之后每次上线只需一条命令。
+            </p>
+        </div>
+
+        <div class="workbench">
+            <div class="steps">
+                <div class="step">
+                    <div class="step-header">
+                        <span class="num">01</span>
+                        <div class="heading">
+                            <span class="label">配置公钥鉴权</span>
+                            <span class="desc">生成密钥，把公钥交给管理员导入白名单，即时生效</span>
+                        </div>
+                        <button class="copy" data-copy={STEP1_COPY} aria-label="复制命令">&#8943;</button>
+                    </div>
+                    <div class="code">
+                        <div class="cl c-dim"># 本地：生成密钥（已有可跳过）</div>
+                        <div class="cl c-cmd">$ ssh-keygen -t ed25519</div>
+                        <div class="cl c-cmd">$ cat ~/.ssh/id_ed25519.pub</div>
+                        <div class="cl">&nbsp;</div>
+                        <div class="cl c-dim"># 管理员在服务器上导入</div>
+                        <div class="cl c-cmd">$ sudo sish-adduser alice "ssh-ed25519 AAAA..."</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-header">
+                        <span class="num">02</span>
+                        <div class="heading">
+                            <span class="label">一条命令上线</span>
+                            <span class="desc">SSH 反向端口转发，Ctrl-C 即下线；子域名被占用时自动分配随机子域名</span>
+                        </div>
+                        <button class="copy" data-copy={STEP2_COPY} aria-label="复制命令">&#8943;</button>
+                    </div>
+                    <div class="code">
+                        <div class="cl c-dim"># 指定子域名 → https://dev.edge.ng</div>
+                        <div class="cl c-cmd">$ ssh -R dev:80:127.0.0.1:8080 ssh.edge.ng</div>
+                        <div class="cl">&nbsp;</div>
+                        <div class="cl c-dim"># 随机子域名 → https://xxx.edge.ng</div>
+                        <div class="cl c-cmd">$ ssh -R 80:127.0.0.1:8080 ssh.edge.ng</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip">
+                <span class="tip-tag">TIP</span>
+                <span class="tip-text">需要长时间挂着？用 autossh 断线自动重连：</span>
+                <code>autossh -M 0 -o "ServerAliveInterval 30" -R dev:80:127.0.0.1:8080 ssh.edge.ng</code>
+                <button class="copy tip-copy" data-copy={TIP_COPY} aria-label="复制命令">&#8943;</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    #quickstart {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 12% 22%, rgba(194, 90, 53, 0.08), transparent 24rem),
+            linear-gradient(180deg, #f7f1e6 0%, #f3ecdf 100%);
+        border-top: 1px solid var(--line);
+    }
+    #quickstart::before {
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        content: "";
+        opacity: 0.42;
+        background-image: radial-gradient(#b9aa94 0.75px, transparent 0.75px);
+        background-size: 18px 18px;
+        mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 35%, transparent);
+        -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.55), transparent 35%, transparent);
+    }
+    .inner {
+        padding-top: clamp(64px, 7vw, 96px);
+        padding-bottom: clamp(72px, 8vw, 104px);
+    }
+    .head {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+        gap: clamp(32px, 6vw, 80px);
+        align-items: end;
+        margin-bottom: 34px;
+    }
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+    }
+    .eyebrow::before {
+        width: 28px;
+        height: 1px;
+        content: "";
+        background: currentColor;
+    }
+    h2 {
+        margin-top: 14px;
+        font-size: clamp(28px, 2.8vw, 38px);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
+    }
+    .sub {
+        color: var(--ink-2);
+        font-size: 15px;
+        line-height: 1.75;
+        max-width: 420px;
+    }
+
+    .workbench {
+        padding: 14px;
+        background: rgba(255, 252, 246, 0.72);
+        border: 1px solid rgba(122, 95, 64, 0.2);
+        border-radius: 22px;
+        box-shadow:
+            0 1px 1px rgba(56, 36, 18, 0.05),
+            0 20px 55px rgba(67, 45, 24, 0.1);
+        backdrop-filter: blur(12px);
+    }
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        align-items: stretch;
+    }
+    .step {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        padding: 18px;
+        background: rgba(255, 254, 251, 0.9);
+        border: 1px solid #e5d9c7;
+        border-radius: 15px;
+        box-shadow: 0 6px 18px rgba(59, 40, 22, 0.035);
+        transition:
+            transform 0.22s ease,
+            border-color 0.22s ease,
+            box-shadow 0.22s ease;
+    }
+    .step:hover {
+        z-index: 2;
+        border-color: #d5bea5;
+        box-shadow: 0 14px 30px rgba(59, 40, 22, 0.08);
+        transform: translateY(-3px);
+    }
+    .step:not(:last-child)::after {
+        position: absolute;
+        z-index: 3;
+        top: 50%;
+        right: -17px;
+        width: 24px;
+        height: 24px;
+        content: "→";
+        display: grid;
+        place-items: center;
+        color: #a78f74;
+        background: #f8f2e7;
+        border: 1px solid #dacbb6;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 12px;
+        transform: translateY(-50%);
+    }
+    .step-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .num {
+        flex: none;
+        padding-top: 3px;
+        color: var(--terracotta);
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+    }
+    .heading {
+        display: grid;
+        min-width: 0;
+        gap: 4px;
+        flex: 1;
+    }
+    .label {
+        color: #29241e;
+        font-size: 14.5px;
+        font-weight: 700;
+        line-height: 1.25;
+    }
+    .desc {
+        color: #7c7367;
+        font-size: 11.5px;
+        line-height: 1.5;
+    }
+    .copy {
+        flex: none;
+        width: 28px;
+        height: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e0d3bf;
+        background: #fbf6ed;
+        color: #8a7c68;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 13px;
+        transition:
+            background 0.15s,
+            color 0.15s;
+    }
+    .copy:hover {
+        background: #f3e9d9;
+        color: var(--terracotta-dark);
+    }
+    .code {
+        flex: 1;
+        padding: 26px 16px 18px;
+        position: relative;
+        overflow: auto;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent),
+            var(--term-bg);
+        border: 1px solid #2c2924;
+        border-radius: 10px;
+        box-shadow:
+            inset 0 1px rgba(255, 255, 255, 0.04),
+            0 8px 18px rgba(31, 25, 20, 0.12);
+        font-family: var(--mono);
+        font-size: 12px;
+        line-height: 1.8;
+    }
+    .code::before {
+        position: absolute;
+        top: 12px;
+        left: 14px;
+        width: 5px;
+        height: 5px;
+        content: "";
+        background: #665b4d;
+        border-radius: 50%;
+        box-shadow:
+            9px 0 #514c43,
+            18px 0 #3e4e37;
+    }
+    .cl {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+    .c-dim {
+        color: #8b8472;
+    }
+    .c-cmd {
+        color: #d8d4ca;
+    }
+
+    .tip {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+        padding: 13px 16px;
+        background: rgba(246, 236, 228, 0.75);
+        border: 1px solid #ecd9c9;
+        border-radius: 13px;
+    }
+    .tip-tag {
+        flex: none;
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: #fffaf5;
+        background: var(--terracotta);
+        padding: 3px 8px;
+        border-radius: 5px;
+    }
+    .tip-text {
+        font-size: 13px;
+        color: var(--ink-2);
+        font-weight: 500;
+    }
+    .tip code {
+        font-family: var(--mono);
+        font-size: 11.5px;
+        color: #6e4a35;
+        background: rgba(255, 253, 248, 0.9);
+        border: 1px solid #e5d3bd;
+        padding: 4px 9px;
+        border-radius: 7px;
+        overflow-x: auto;
+        max-width: 100%;
+    }
+    .tip-copy {
+        margin-left: auto;
+    }
+
+    @media (max-width: 920px) {
+        .head {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .steps {
+            grid-template-columns: 1fr;
+        }
+        .step:not(:last-child)::after {
+            top: auto;
+            right: 50%;
+            bottom: -19px;
+            content: "↓";
+            transform: translateX(50%);
+        }
+    }
+    @media (max-width: 620px) {
+        .inner {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+        .workbench {
+            padding: 10px;
+            border-radius: 17px;
+        }
+        .tip-copy {
+            margin-left: 0;
+        }
+    }
+</style>

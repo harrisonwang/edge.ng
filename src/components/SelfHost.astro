@@ -1,0 +1,295 @@
+---
+const INSTALL_CMD =
+    "curl -fsSL https://gist.githubusercontent.com/harrisonwang/bcbfea9d71510ec300bdbfe9eab8f9bb/raw/sish-install.sh | sudo DOMAIN=example.com ACME_EMAIL=you@example.com CF_Token=xxx TAKEOVER_22=yes bash";
+const CONFIRM_CMD = "sudo sish-confirm";
+const ADDUSER_CMD = 'sudo sish-adduser alice "ssh-ed25519 AAAA... alice@laptop"';
+---
+
+<section id="selfhost">
+    <div class="wrap inner">
+        <div class="head">
+            <div class="eyebrow">SELF-HOST</div>
+            <h2>三步，自建同款服务</h2>
+            <p class="sub">
+                不常用容易忘，完整部署流程记在这里。前置条件：一台有公网 IP 的服务器（Ubuntu/Debian），域名的
+                <code>@</code> 和 <code>*</code> 两条 A 记录指向它。
+            </p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-header">
+                    <span class="num">01</span>
+                    <div class="heading">
+                        <span class="label">服务器：一键安装</span>
+                        <span class="desc">自动接管 22 端口 + 签发泛域名 HTTPS 证书（域名托管在 Cloudflare）</span>
+                    </div>
+                    <button class="copy" data-copy={INSTALL_CMD} aria-label="复制命令">&#8943;</button>
+                </div>
+                <div class="code">
+                    <div class="cl c-cmd">$ curl -fsSL https://gist.githubusercontent.com/</div>
+                    <div class="cl c-cmd">    harrisonwang/bcbfea9d71510ec300bdbfe9eab8f9bb/</div>
+                    <div class="cl c-cmd">    raw/sish-install.sh \</div>
+                    <div class="cl c-cmd">  | sudo DOMAIN=example.com \</div>
+                    <div class="cl c-cmd">    ACME_EMAIL=you@example.com \</div>
+                    <div class="cl c-cmd">    CF_Token=xxx TAKEOVER_22=yes bash</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-header">
+                    <span class="num">02</span>
+                    <div class="heading">
+                        <span class="label">服务器：放行端口并确认</span>
+                        <span class="desc">10 分钟内未确认会自动回滚，登录不上也不会失联</span>
+                    </div>
+                    <button class="copy" data-copy={CONFIRM_CMD} aria-label="复制命令">&#8943;</button>
+                </div>
+                <div class="code">
+                    <div class="cl c-dim"># 云安全组放行 22022（管理 SSH 新端口）</div>
+                    <div class="cl c-dim"># 新开终端验证能登录：</div>
+                    <div class="cl c-cmd">$ ssh -p 22022 ubuntu@服务器IP</div>
+                    <div class="cl">&nbsp;</div>
+                    <div class="cl c-dim"># 登录成功后，取消自动回滚：</div>
+                    <div class="cl c-cmd">$ sudo sish-confirm</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-header">
+                    <span class="num">03</span>
+                    <div class="heading">
+                        <span class="label">添加用户，开始使用</span>
+                        <span class="desc">导入公钥即时生效，之后就是上面的快速开始</span>
+                    </div>
+                    <button class="copy" data-copy={ADDUSER_CMD} aria-label="复制命令">&#8943;</button>
+                </div>
+                <div class="code">
+                    <div class="cl c-dim"># 服务器：导入用户公钥</div>
+                    <div class="cl c-cmd">$ sudo sish-adduser alice \</div>
+                    <div class="cl c-cmd">    "ssh-ed25519 AAAA... alice@laptop"</div>
+                    <div class="cl">&nbsp;</div>
+                    <div class="cl c-dim"># 客户端：建隧道</div>
+                    <div class="cl c-cmd">$ ssh -R demo:80:127.0.0.1:4321 ssh.example.com</div>
+                </div>
+            </div>
+        </div>
+        <p class="note">
+            环境变量、HTTPS 证书方式、卸载等完整说明见
+            <a href="https://gist.github.com/harrisonwang/bcbfea9d71510ec300bdbfe9eab8f9bb" target="_blank" rel="noopener">安装脚本头部注释 ↗</a>
+        </p>
+    </div>
+</section>
+
+<style>
+    #selfhost {
+        border-top: 1px solid var(--line);
+    }
+    .inner {
+        padding-top: clamp(64px, 7vw, 96px);
+        padding-bottom: clamp(64px, 7vw, 96px);
+    }
+    .head {
+        max-width: 640px;
+        margin-bottom: 42px;
+    }
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+    }
+    .eyebrow::before {
+        width: 28px;
+        height: 1px;
+        content: "";
+        background: currentColor;
+    }
+    h2 {
+        margin-top: 14px;
+        font-size: clamp(28px, 2.8vw, 38px);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
+    }
+    .sub {
+        margin-top: 14px;
+        color: var(--ink-2);
+        font-size: 15px;
+        line-height: 1.75;
+    }
+    .sub code {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--terracotta-dark);
+        background: #f6ece4;
+        border: 1px solid #ecd9c9;
+        padding: 1px 6px;
+        border-radius: 5px;
+    }
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        align-items: stretch;
+    }
+    .step {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        padding: 18px;
+        background: rgba(255, 254, 251, 0.9);
+        border: 1px solid #e5d9c7;
+        border-radius: 15px;
+        box-shadow: 0 6px 18px rgba(59, 40, 22, 0.035);
+        transition:
+            transform 0.22s ease,
+            border-color 0.22s ease,
+            box-shadow 0.22s ease;
+    }
+    .step:hover {
+        z-index: 2;
+        border-color: #d5bea5;
+        box-shadow: 0 14px 30px rgba(59, 40, 22, 0.08);
+        transform: translateY(-3px);
+    }
+    .step:not(:last-child)::after {
+        position: absolute;
+        z-index: 3;
+        top: 50%;
+        right: -19px;
+        width: 24px;
+        height: 24px;
+        content: "→";
+        display: grid;
+        place-items: center;
+        color: #a78f74;
+        background: #f8f2e7;
+        border: 1px solid #dacbb6;
+        border-radius: 999px;
+        font-family: var(--mono);
+        font-size: 12px;
+        transform: translateY(-50%);
+    }
+    .step-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .num {
+        flex: none;
+        padding-top: 3px;
+        color: var(--terracotta);
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+    }
+    .heading {
+        display: grid;
+        min-width: 0;
+        gap: 4px;
+        flex: 1;
+    }
+    .label {
+        color: #29241e;
+        font-size: 14.5px;
+        font-weight: 700;
+        line-height: 1.25;
+    }
+    .desc {
+        color: #7c7367;
+        font-size: 11.5px;
+        line-height: 1.5;
+    }
+    .copy {
+        flex: none;
+        width: 28px;
+        height: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e0d3bf;
+        background: #fbf6ed;
+        color: #8a7c68;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 13px;
+        transition:
+            background 0.15s,
+            color 0.15s;
+    }
+    .copy:hover {
+        background: #f3e9d9;
+        color: var(--terracotta-dark);
+    }
+    .code {
+        flex: 1;
+        padding: 26px 16px 18px;
+        position: relative;
+        overflow: auto;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent),
+            var(--term-bg);
+        border: 1px solid #2c2924;
+        border-radius: 10px;
+        box-shadow:
+            inset 0 1px rgba(255, 255, 255, 0.04),
+            0 8px 18px rgba(31, 25, 20, 0.12);
+        font-family: var(--mono);
+        font-size: 11.5px;
+        line-height: 1.8;
+    }
+    .code::before {
+        position: absolute;
+        top: 12px;
+        left: 14px;
+        width: 5px;
+        height: 5px;
+        content: "";
+        background: #665b4d;
+        border-radius: 50%;
+        box-shadow:
+            9px 0 #514c43,
+            18px 0 #3e4e37;
+    }
+    .cl {
+        white-space: pre;
+    }
+    .c-dim {
+        color: #8b8472;
+    }
+    .c-cmd {
+        color: #d8d4ca;
+    }
+    .note {
+        margin-top: 18px;
+        font-size: 13px;
+        color: var(--muted);
+    }
+    .note a {
+        color: var(--terracotta-dark);
+        border-bottom: 1px solid #e7c9b8;
+        transition: border-color 0.15s;
+    }
+    .note a:hover {
+        border-color: var(--terracotta);
+    }
+    @media (max-width: 1000px) {
+        .steps {
+            grid-template-columns: 1fr;
+        }
+        .step:not(:last-child)::after {
+            top: auto;
+            right: 50%;
+            bottom: -21px;
+            content: "↓";
+            transform: translateX(50%);
+        }
+    }
+    @media (max-width: 620px) {
+        .inner {
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+    }
+</style>
